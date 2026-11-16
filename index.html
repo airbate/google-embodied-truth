@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Google 具身真心话 · 现场抽选</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Subtle Swiss Grid & Google 4-Color Bauhaus Geometric Background -->
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="bg-geometry" aria-hidden="true">
+    <!-- Top Left Bauhaus Overlapping Shapes -->
+    <svg class="geo-corner geo-tl" viewBox="0 0 280 280" fill="none">
+      <circle cx="95" cy="95" r="78" fill="#4285F4" />
+      <rect x="110" y="55" width="115" height="115" rx="24" fill="#FBBC05" />
+      <clipPath id="tl-intersect">
+        <circle cx="95" cy="95" r="78" />
+      </clipPath>
+      <rect x="110" y="55" width="115" height="115" rx="24" fill="#34A853" clip-path="url(#tl-intersect)" />
+      <circle cx="205" cy="195" r="28" fill="#EA4335" />
+    </svg>
+
+    <!-- Bottom Right Bauhaus Overlapping Shapes -->
+    <svg class="geo-corner geo-br" viewBox="0 0 300 260" fill="none">
+      <rect x="45" y="110" width="190" height="60" rx="30" transform="rotate(-24 45 110)" fill="#EA4335" />
+      <circle cx="195" cy="135" r="66" fill="#4285F4" />
+      <clipPath id="br-intersect">
+        <circle cx="195" cy="135" r="66" />
+      </clipPath>
+      <rect x="45" y="110" width="190" height="60" rx="30" transform="rotate(-24 45 110)" fill="#1967D2" clip-path="url(#br-intersect)" />
+      <polygon points="75,165 135,230 35,230" fill="#34A853" />
+      <circle cx="110" cy="60" r="18" fill="#FBBC05" />
+    </svg>
+  </div>
+
+  <!-- 4-Color Top Bar -->
+  <div class="top-color-bar">
+    <span class="c-blue"></span>
+    <span class="c-red"></span>
+    <span class="c-yellow"></span>
+    <span class="c-green"></span>
+  </div>
+
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Single Pure Main Stage -->
+  <main class="main-screen">
+    <!-- Header Title Area -->
+    <header class="hero-header">
+      <div class="brand-pill">
+        <span class="g-dots">
+          <i class="d-blue"></i>
+          <i class="d-red"></i>
+          <i class="d-yellow"></i>
+          <i class="d-green"></i>
+        </span>
+        <span class="brand-text">GOOGLE · EMBODIED AI</span>
+      </div>
+      <h1 class="hero-title">具身真心话</h1>
+      <p class="hero-subtitle">抽取现场嘉宾登台 · 分享真实的具身智能洞察</p>
+    </header>
+
+    <!-- Centerpiece Lottery Stage Card -->
+    <section class="stage-card" id="stage-card">
+      <!-- Top Decorative Geometric Header Strip -->
+      <div class="card-top-strip">
+        <div class="strip-dots">
+          <span class="s-dot d-blue"></span>
+          <span class="s-dot d-red"></span>
+          <span class="s-dot d-yellow"></span>
+          <span class="s-dot d-green"></span>
+        </div>
+        <span class="stage-status-tag" id="stage-status-tag">READY TO DRAW</span>
+      </div>
+
+      <!-- Main Speaker Display Area -->
+      <div class="speaker-showcase">
+        <div class="avatar-frame" id="avatar-frame">
+          <!-- Bauhaus Embodied AI Geometric Avatar injected by JS -->
+        </div>
+
+        <div class="speaker-details">
+          <div class="speaker-org-tag" id="speaker-org">问卷报名嘉宾</div>
+          <div class="speaker-name" id="speaker-name">虚位以待</div>
+        </div>
+      </div>
+
+      <!-- Divider with Geometric Node -->
+      <div class="truth-divider">
+        <span class="div-line"></span>
+        <span class="div-badge">具身真心话 · ON STAGE</span>
+        <span class="div-line"></span>
+      </div>
+
+      <!-- Embodied Truth Quote / Question Area -->
+      <div class="truth-box" id="truth-box">
+        <p class="truth-content" id="truth-content">
+          “点击下方按钮抽取现场嘉宾，揭晓 Ta 的具身真心话”
+        </p>
+      </div>
+    </section>
+
+    <!-- Single Action Button -->
+    <div class="action-area">
+      <button class="draw-button" id="btn-draw">
+        <span class="btn-shapes" aria-hidden="true">
+          <i class="sh-circle"></i>
+          <i class="sh-square"></i>
+          <i class="sh-triangle"></i>
+        </span>
+        <span class="btn-label" id="btn-label">开始抽取上台嘉宾</span>
+      </button>
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
