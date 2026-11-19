@@ -1,7 +1,7 @@
 /**
- * Google 具身真心话 · 3D 分类漫游词云脚本
- * 36 条真实匿名真心话（已移除庄子文词条，不显示姓名、标题栏与底部切换条）
- * 通过键盘快捷键切换：1(正面好评) / 2(中性思辨) / 3(消极吐槽) / 4或0(全部) / ←→ 循环切换 / Esc 关闭弹窗
+ * Google × 探月 具身真心话 · 3D 分类漫游词云脚本
+ * 36 条真实匿名真心话（已移除庄子文词条，保留正面好评 17 / 中性思辨 12 / 消极吐槽 7 / 全部 36）
+ * 支持底部按钮与键盘快捷键切换（1/2/3/4或0 / ←→ / Esc），60-120fps GPU 合成物理引擎
  */
 
 const TRUTH_ITEMS = [
@@ -161,18 +161,26 @@ const CATEGORY_ORDER = ['positive', 'neutral', 'negative', 'all'];
 const CLOUD_CATEGORIES = {
   positive: {
     key: 'positive',
+    title: '正面好评',
+    subtitle: '乐观期待与行业愿景',
     themes: ['green', 'blue']
   },
   neutral: {
     key: 'neutral',
+    title: '中性思辨',
+    subtitle: '理性探讨与技术发问',
     themes: ['blue', 'yellow']
   },
   negative: {
     key: 'negative',
+    title: '消极吐槽',
+    subtitle: '犀利批判与现实焦虑',
     themes: ['red', 'yellow']
   },
   all: {
     key: 'all',
+    title: '全部词条',
+    subtitle: '全景具身真心话漫游',
     themes: ['blue', 'red', 'yellow', 'green']
   }
 };
@@ -185,6 +193,12 @@ const SENTIMENT_LABELS = {
 
 function easeOutCubic(t) {
   return 1 - Math.pow(1 - t, 3);
+}
+
+function setActiveCategoryButton(catKey) {
+  document.querySelectorAll('.cat-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.category === catKey);
+  });
 }
 
 class TruthCloud3D {
@@ -248,6 +262,11 @@ class TruthCloud3D {
     const items = this.getItemsForCategory(catKey);
 
     document.body.setAttribute('data-category', catKey);
+    const subtitleEl = document.getElementById('cloud-subtitle');
+    if (subtitleEl) {
+      subtitleEl.textContent = `${config.title} · ${config.subtitle}（${items.length} 条）`;
+    }
+    setActiveCategoryButton(catKey);
 
     this.container.innerHTML = '';
     const N = items.length;
@@ -329,6 +348,7 @@ class TruthCloud3D {
     if (!CLOUD_CATEGORIES[catKey]) return;
     if (catKey === this.activeCategory && this.transitionState !== 'exiting') return;
 
+    setActiveCategoryButton(catKey);
     this.pendingCategory = catKey;
     if (this.transitionState !== 'exiting') {
       this.transitionState = 'exiting';
@@ -463,8 +483,9 @@ class TruthCloud3D {
       this.rotateAllNodes(effectiveVelY * dt, effectiveVelX * dt);
     }
 
+    // Float cleanly between restored top header and bottom category dock
     const rx = Math.min(this.vpWidth * 0.41, 610) * this.radiusScale;
-    const ry = Math.min(this.vpHeight * 0.36, 340) * this.radiusScale;
+    const ry = Math.min(this.vpHeight * 0.32, 305) * this.radiusScale;
     const rz = 380 * this.radiusScale;
     const focal = 980;
 
@@ -550,17 +571,35 @@ function closeQuoteModal() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Dynamically populate category counts
+  const posCount = TRUTH_ITEMS.filter((i) => i.sentiment === 'positive').length;
+  const neuCount = TRUTH_ITEMS.filter((i) => i.sentiment === 'neutral').length;
+  const negCount = TRUTH_ITEMS.filter((i) => i.sentiment === 'negative').length;
+  document.getElementById('count-positive').textContent = posCount;
+  document.getElementById('count-neutral').textContent = neuCount;
+  document.getElementById('count-negative').textContent = negCount;
+  document.getElementById('count-all').textContent = TRUTH_ITEMS.length;
+
   const cloudContainer = document.getElementById('cloud-stage-3d');
   const cloudViewport = document.getElementById('cloud-viewport');
   cloudApp = new TruthCloud3D(cloudContainer, cloudViewport);
 
+  // Category switch buttons
+  document.querySelectorAll('.cat-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.category;
+      setActiveCategoryButton(cat);
+      cloudApp.switchCategory(cat);
+    });
+  });
+
+  // Modal close listeners
   document.getElementById('quote-close').addEventListener('click', closeQuoteModal);
   document.getElementById('quote-modal').addEventListener('click', (e) => {
     if (e.target.id === 'quote-modal') closeQuoteModal();
   });
 
-  // Pure keyboard switching:
-  // 1 = 正面好评, 2 = 中性思辨, 3 = 消极吐槽, 4 or 0 = 全部词条, ArrowLeft/ArrowRight = 循环切换, Escape = 关闭弹窗
+  // Keyboard shortcuts: 1/2/3/4/0, ArrowLeft/ArrowRight, Escape
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeQuoteModal();
@@ -574,7 +613,9 @@ document.addEventListener('DOMContentLoaded', () => {
       '0': 'all'
     };
     if (keyMap[e.key]) {
-      cloudApp.switchCategory(keyMap[e.key]);
+      const cat = keyMap[e.key];
+      setActiveCategoryButton(cat);
+      cloudApp.switchCategory(cat);
     } else if (e.key === 'ArrowRight') {
       cloudApp.stepCategory(1);
     } else if (e.key === 'ArrowLeft') {

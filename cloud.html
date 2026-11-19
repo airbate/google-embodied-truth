@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Google 具身真心话 · 3D 漫游词云</title>
+  <title>Google 具身真心话 · 3D 分类漫游词云</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
@@ -57,6 +57,23 @@
     <span>前往抽选舞台 →</span>
   </a>
 
+  <!-- Restored Top Co-Branded Header -->
+  <header class="cloud-header">
+    <div class="brand-pill">
+      <span class="g-dots">
+        <i class="d-blue"></i>
+        <i class="d-red"></i>
+        <i class="d-yellow"></i>
+        <i class="d-green"></i>
+      </span>
+      <span class="brand-text">GOOGLE CLOUD</span>
+      <span class="brand-cross" aria-hidden="true">×</span>
+      <img src="tanyue-logo.png" alt="探月具身智能社区 MOONBOTSPACE" class="tanyue-logo" />
+    </div>
+    <h1 class="cloud-title">具身真心话 · 漫游词云</h1>
+    <p class="cloud-subtitle" id="cloud-subtitle">正面好评 · 乐观期待与行业愿景（17 条）</p>
+  </header>
+
   <!-- Full-Screen 2.5D GPU-Accelerated Floating Quote Cloud Space -->
   <div class="cloud-viewport" id="cloud-viewport">
     <div class="orbital-rings" aria-hidden="true">
@@ -82,6 +99,35 @@
       </div>
     </div>
   </div>
+
+  <!-- Restored Bottom Floating Category Switcher Dock & Interaction Hint -->
+  <footer class="cloud-footer">
+    <nav class="category-dock" aria-label="真心话情感分类切换">
+      <button class="cat-btn active" data-category="positive" type="button">
+        <span class="cat-dot dot-green"></span>
+        <span class="cat-label">正面好评</span>
+        <span class="cat-count" id="count-positive">17</span>
+      </button>
+      <button class="cat-btn" data-category="neutral" type="button">
+        <span class="cat-dot dot-blue"></span>
+        <span class="cat-label">中性思辨</span>
+        <span class="cat-count" id="count-neutral">12</span>
+      </button>
+      <button class="cat-btn" data-category="negative" type="button">
+        <span class="cat-dot dot-red"></span>
+        <span class="cat-label">消极吐槽</span>
+        <span class="cat-count" id="count-negative">7</span>
+      </button>
+      <button class="cat-btn" data-category="all" type="button">
+        <span class="cat-dot dot-all"></span>
+        <span class="cat-label">全部词条</span>
+        <span class="cat-count" id="count-all">36</span>
+      </button>
+    </nav>
+    <div class="hint-pill">
+      支持鼠标拖拽拨动 · 悬停减速阅读 · 点击词条看原文 · 快捷键 1/2/3/4 切换
+    </div>
+  </footer>
 
   <script src="cloud.js"></script>
 </body>
