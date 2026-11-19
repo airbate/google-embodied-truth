@@ -101,12 +101,6 @@ const ROSTER_LIST = [
     truth: '现场盲盒 · 欢迎在台上即兴分享你的具身真心话！'
   },
   {
-    name: '陈博远',
-    role: '参会嘉宾',
-    org: '清华大学人工智能学院 · 博士生',
-    truth: 'GPT6来了，留给具身大脑的时间还多吗？'
-  },
-  {
     name: '池晓威',
     role: '圆桌嘉宾',
     org: '莫刻机器人 · CEO',
@@ -267,7 +261,43 @@ const ROSTER_LIST = [
     role: '参会嘉宾',
     org: '北京大学 HMI Lab · 博士生',
     truth: 'gpt时刻什么时候来临'
+  },
+  {
+    name: '胡钰承',
+    role: '参会嘉宾',
+    org: '受邀嘉宾 · 具身智能专场',
+    truth: '现场盲盒 · 欢迎在台上即兴分享你的具身真心话！'
+  },
+  {
+    name: 'Heather Zhang',
+    role: '参会嘉宾',
+    org: '受邀嘉宾 · 具身智能专场',
+    truth: '现场盲盒 · 欢迎在台上即兴分享你的具身真心话！'
+  },
+  {
+    name: 'Iris Chen',
+    role: '参会嘉宾',
+    org: '受邀嘉宾 · 具身智能专场',
+    truth: '现场盲盒 · 欢迎在台上即兴分享你的具身真心话！'
   }
+];
+
+// 优先抽取顺序（按指定顺序依次登台，抽完后其余嘉宾随机不重复抽取）
+const PRIORITY_NAMES = [
+  '庄子文',
+  '丁鹏翔',
+  '朱徽',
+  '胡钰承',
+  '贺一鸣',
+  'Heather Zhang',
+  'Iris Chen',
+  '刘逸阳',
+  '洪戴维',
+  '胡王浩',
+  '黄悦',
+  '徐超逸',
+  '李和衷',
+  '陈粤洋'
 ];
 
 const GOOGLE_THEMES = ['blue', 'red', 'yellow', 'green'];
@@ -275,7 +305,27 @@ const GOOGLE_HEX = ['#4285F4', '#EA4335', '#FBBC05', '#34A853'];
 
 let isRolling = false;
 let rollTimer = null;
-let remainingIndices = ROSTER_LIST.map((_, i) => i);
+let priorityQueue = [];
+let randomPoolIndices = [];
+
+function initDrawPools() {
+  const prioritySet = new Set();
+  priorityQueue = [];
+
+  PRIORITY_NAMES.forEach(targetName => {
+    const idx = ROSTER_LIST.findIndex(p => p.name === targetName);
+    if (idx !== -1 && !prioritySet.has(idx)) {
+      priorityQueue.push(idx);
+      prioritySet.add(idx);
+    }
+  });
+
+  randomPoolIndices = ROSTER_LIST
+    .map((_, i) => i)
+    .filter(i => !prioritySet.has(i));
+}
+
+initDrawPools();
 
 // Web Audio API Synthesizer for crisp Google-style Marimba chimes
 class SoundFX {
@@ -397,9 +447,9 @@ function toggleDraw() {
   const statusEl = document.getElementById('stage-status-tag');
 
   if (!isRolling) {
-    // Refill indices if everyone has been drawn once
-    if (remainingIndices.length === 0) {
-      remainingIndices = ROSTER_LIST.map((_, i) => i);
+    // Refill pools if everyone has been drawn once
+    if (priorityQueue.length === 0 && randomPoolIndices.length === 0) {
+      initDrawPools();
     }
 
     isRolling = true;
@@ -422,9 +472,14 @@ function toggleDraw() {
     btn.classList.remove('is-rolling');
     btnLabel.textContent = '抽取下一位分享嘉宾';
 
-    // Pick from remaining pool so no one repeats until full cycle finishes
-    const poolPos = Math.floor(Math.random() * remainingIndices.length);
-    const chosenIdx = remainingIndices.splice(poolPos, 1)[0];
+    // Pick in priority order first, then randomly from remaining guests
+    let chosenIdx;
+    if (priorityQueue.length > 0) {
+      chosenIdx = priorityQueue.shift();
+    } else {
+      const poolPos = Math.floor(Math.random() * randomPoolIndices.length);
+      chosenIdx = randomPoolIndices.splice(poolPos, 1)[0];
+    }
     const winner = ROSTER_LIST[chosenIdx];
 
     renderPerson(winner, chosenIdx, true);
