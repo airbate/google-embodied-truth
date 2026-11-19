@@ -180,8 +180,9 @@ body.is-rolling .geo-br {
 .brand-pill {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 7px 18px;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 22px;
   background: var(--surface-white);
   border: 2px solid var(--border-dark);
   border-radius: 999px;
@@ -207,6 +208,20 @@ body.is-rolling .geo-br {
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--text-main);
+}
+
+.brand-cross {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-sub);
+  line-height: 1;
+}
+
+.tanyue-logo {
+  height: 26px;
+  width: auto;
+  display: block;
+  object-fit: contain;
 }
 
 .hero-title {
@@ -462,6 +477,9 @@ body.is-rolling .geo-br {
 }
 
 @media (max-width: 680px) {
+  .brand-pill { padding: 6px 14px; gap: 8px; }
+  .brand-text { font-size: 11px; }
+  .tanyue-logo { height: 20px; }
   .hero-title { font-size: 38px; }
   .stage-card { padding: 22px; }
   .speaker-showcase { flex-direction: column; text-align: center; gap: 16px; }
