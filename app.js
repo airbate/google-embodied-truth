@@ -1,6 +1,6 @@
 /**
- * Google 具身真心话 · 3D 悬浮词云 & 现场抽选系统
- * 谷歌四色包豪斯美学 (Google 4-Color Bauhaus) + 3D 空间环绕词云
+ * Google 具身真心话 · 现场抽人上台网页 (纯粹主舞台版)
+ * 已内置问卷全量真实嘉宾名单 & 14 人优先抽取顺序（已剔除陈博远）
  */
 
 const ROSTER_LIST = [
@@ -282,7 +282,7 @@ const ROSTER_LIST = [
   }
 ];
 
-// 优先抽取顺序（按指定顺序依次登台，已剔除陈博远；抽完后其余嘉宾随机不重复抽取）
+// 优先抽取顺序（按指定顺序依次登台，抽完后其余嘉宾随机不重复抽取）
 const PRIORITY_NAMES = [
   '庄子文',
   '丁鹏翔',
@@ -376,192 +376,6 @@ class SoundFX {
 
 const sfx = new SoundFX();
 
-// ============================================================================
-// 3D Floating Word Cloud Engine (Fibonacci Sphere + Mid-Air Organic Drift)
-// ============================================================================
-class TruthCloud3D {
-  constructor(containerEl, items) {
-    this.container = containerEl;
-    this.items = items;
-    this.nodes = [];
-
-    // Rotation speeds (rad/frame)
-    this.baseSpeedY = 0.0032;
-    this.baseSpeedX = 0.0008;
-    this.velY = this.baseSpeedY;
-    this.velX = this.baseSpeedX;
-    this.speedMultiplier = 1;
-
-    this.isDragging = false;
-    this.lastMouseX = 0;
-    this.lastMouseY = 0;
-    this.time = 0;
-
-    this.initNodes();
-    this.bindInteraction();
-    this.animate();
-  }
-
-  // Format short display quote for floating cloud capsule
-  formatCloudSnippet(person) {
-    const raw = (person.truth || '').trim();
-    if (!raw || raw.startsWith('现场盲盒')) {
-      return `✨ ${person.org.split('·')[0].trim()} · 具身真心话`;
-    }
-    return raw.length > 24 ? raw.slice(0, 23) + '…' : raw;
-  }
-
-  initNodes() {
-    this.container.innerHTML = '';
-    const N = this.items.length;
-    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-
-    this.nodes = this.items.map((person, i) => {
-      // Fibonacci sphere distribution in (-1 .. 1)
-      const y = 1 - (i / (N - 1)) * 2;
-      const radiusAtY = Math.sqrt(1 - y * y);
-      const theta = goldenAngle * i;
-      const x = Math.cos(theta) * radiusAtY;
-      const z = Math.sin(theta) * radiusAtY;
-
-      const theme = GOOGLE_THEMES[i % 4];
-      const el = document.createElement('div');
-      el.className = `cloud-tag tag-theme-${theme}`;
-      el.dataset.index = i;
-
-      const snippet = this.formatCloudSnippet(person);
-      el.innerHTML = `
-        <span class="tag-geo-dot"></span>
-        <span class="tag-quote">“${this.escape(snippet)}”</span>
-        <span class="tag-author">${this.escape(person.name)}</span>
-      `;
-
-      // Clicking any floating cloud phrase reveals that person's full card
-      el.addEventListener('click', e => {
-        e.stopPropagation();
-        if (isRolling) return;
-        sfx.tick(i);
-        showSpotlightCard(person, i);
-      });
-
-      this.container.appendChild(el);
-
-      return {
-        el,
-        x,
-        y,
-        z,
-        phase: i * 0.73
-      };
-    });
-  }
-
-  bindInteraction() {
-    const vp = document.getElementById('cloud-viewport');
-
-    vp.addEventListener('mousedown', e => {
-      this.isDragging = true;
-      this.lastMouseX = e.clientX;
-      this.lastMouseY = e.clientY;
-    });
-
-    window.addEventListener('mousemove', e => {
-      if (this.isDragging) {
-        const dx = e.clientX - this.lastMouseX;
-        const dy = e.clientY - this.lastMouseY;
-        this.velY = dx * 0.00035;
-        this.velX = -dy * 0.00035;
-        this.lastMouseX = e.clientX;
-        this.lastMouseY = e.clientY;
-      } else {
-        // Gentle parallax steering from cursor position relative to screen center
-        const nx = (e.clientX / window.innerWidth - 0.5) * 2;
-        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-        this.velY += (nx * 0.0055 - this.velY) * 0.04;
-        this.velX += (-ny * 0.0032 - this.velX) * 0.04;
-      }
-    });
-
-    window.addEventListener('mouseup', () => {
-      this.isDragging = false;
-    });
-  }
-
-  setFastSpin(enabled) {
-    this.speedMultiplier = enabled ? 8.5 : 1;
-    if (!enabled) {
-      this.nodes.forEach(n => n.el.classList.remove('is-flashing'));
-    }
-  }
-
-  flashRandomNode(idx) {
-    this.nodes.forEach(n => n.el.classList.remove('is-flashing'));
-    if (this.nodes[idx]) {
-      this.nodes[idx].el.classList.add('is-flashing');
-    }
-  }
-
-  animate() {
-    this.time += 0.025;
-
-    const ay = this.velY * this.speedMultiplier;
-    const ax = this.velX * this.speedMultiplier;
-    const cosY = Math.cos(ay);
-    const sinY = Math.sin(ay);
-    const cosX = Math.cos(ax);
-    const sinX = Math.sin(ax);
-
-    // Responsive 3D ellipsoid radii filling the mid-air space
-    const rx = Math.min(window.innerWidth * 0.41, 590);
-    const ry = Math.min(window.innerHeight * 0.34, 330);
-    const rz = 380;
-
-    this.nodes.forEach(node => {
-      // Rotate around Y axis
-      const x1 = node.x * cosY - node.z * sinY;
-      const z1 = node.z * cosY + node.x * sinY;
-
-      // Rotate around X axis
-      const y2 = node.y * cosX - z1 * sinX;
-      const z2 = z1 * cosX + node.y * sinX;
-
-      node.x = x1;
-      node.y = y2;
-      node.z = z2;
-
-      // Add organic mid-air vertical wave drift
-      const floatOffsetY = Math.sin(this.time + node.phase) * 9;
-
-      const px = node.x * rx;
-      const py = node.y * ry + floatOffsetY;
-      const pz = node.z * rz;
-
-      // Depth normalized [0 (back) .. 1 (front)]
-      const depthNorm = (node.z + 1) / 2;
-      const scale = 0.56 + depthNorm * 0.58;
-      const opacity = 0.22 + Math.pow(depthNorm, 1.35) * 0.78;
-      const blurPx = depthNorm < 0.36 ? ((0.36 - depthNorm) * 4.2).toFixed(1) : 0;
-
-      node.el.style.transform = `translate3d(calc(-50% + ${px.toFixed(1)}px), calc(-50% + ${py.toFixed(1)}px), ${pz.toFixed(1)}px) scale(${scale.toFixed(3)})`;
-      node.el.style.opacity = opacity.toFixed(2);
-      node.el.style.zIndex = Math.round(depthNorm * 100);
-      node.el.style.filter = blurPx > 0 ? `blur(${blurPx}px)` : 'none';
-    });
-
-    requestAnimationFrame(() => this.animate());
-  }
-
-  escape(str = '') {
-    return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;');
-  }
-}
-
-let cloud3D = null;
-
 // Bauhaus 4-Color Embodied AI Avatar Generator
 function buildBauhausAvatar(seedIndex = 0) {
   const c1 = GOOGLE_HEX[seedIndex % 4];
@@ -604,7 +418,7 @@ function buildBauhausAvatar(seedIndex = 0) {
   }
 }
 
-function showSpotlightCard(person, idx) {
+function renderPerson(person, idx, isLocked = false) {
   const theme = GOOGLE_THEMES[idx % 4];
   const stageCard = document.getElementById('stage-card');
   const avatarFrame = document.getElementById('avatar-frame');
@@ -618,24 +432,19 @@ function showSpotlightCard(person, idx) {
   orgEl.textContent = person.org;
   nameEl.textContent = person.name;
   truthEl.textContent = `“${person.truth}”`;
-  statusEl.textContent = `${person.role || '登台嘉宾'} · ON STAGE`;
 
-  document.body.classList.add('card-open');
   stageCard.className = `stage-card accent-${theme}`;
-  void stageCard.offsetWidth;
-  stageCard.classList.add('winner-locked');
-}
-
-function hideSpotlightCard() {
-  const stageCard = document.getElementById('stage-card');
-  stageCard.classList.add('is-hidden');
-  stageCard.classList.remove('winner-locked');
-  document.body.classList.remove('card-open');
+  if (isLocked) {
+    void stageCard.offsetWidth;
+    stageCard.classList.add('winner-locked');
+    statusEl.textContent = `${person.role || '登台嘉宾'} · ON STAGE`;
+  }
 }
 
 function toggleDraw() {
   const btn = document.getElementById('btn-draw');
   const btnLabel = document.getElementById('btn-label');
+  const statusEl = document.getElementById('stage-status-tag');
 
   if (!isRolling) {
     // Refill pools if everyone has been drawn once
@@ -643,31 +452,25 @@ function toggleDraw() {
       initDrawPools();
     }
 
-    // Hide center card so the full 3D Floating Word Cloud takes center stage during the spin!
-    hideSpotlightCard();
-
     isRolling = true;
     document.body.classList.add('is-rolling');
     btn.classList.add('is-rolling');
-    btnLabel.textContent = '锁定登台嘉宾 (Space)';
-
-    if (cloud3D) cloud3D.setFastSpin(true);
+    btnLabel.textContent = '停止并锁定嘉宾';
+    statusEl.textContent = 'SELECTING · 正在抽取...';
 
     let step = 0;
     rollTimer = setInterval(() => {
       step++;
       sfx.tick(step);
       const randIdx = Math.floor(Math.random() * ROSTER_LIST.length);
-      if (cloud3D) cloud3D.flashRandomNode(randIdx);
-    }, 75);
+      renderPerson(ROSTER_LIST[randIdx], randIdx, false);
+    }, 70);
   } else {
     clearInterval(rollTimer);
     isRolling = false;
     document.body.classList.remove('is-rolling');
     btn.classList.remove('is-rolling');
-    btnLabel.textContent = '继续从词云抽取下一位';
-
-    if (cloud3D) cloud3D.setFastSpin(false);
+    btnLabel.textContent = '抽取下一位分享嘉宾';
 
     // Pick in priority order first, then randomly from remaining guests
     let chosenIdx;
@@ -679,8 +482,7 @@ function toggleDraw() {
     }
     const winner = ROSTER_LIST[chosenIdx];
 
-    if (cloud3D) cloud3D.flashRandomNode(chosenIdx);
-    showSpotlightCard(winner, chosenIdx);
+    renderPerson(winner, chosenIdx, true);
     sfx.win();
     launchConfetti();
   }
@@ -694,7 +496,7 @@ function launchConfetti() {
   canvas.height = window.innerHeight;
 
   const shapes = ['circle', 'square', 'triangle', 'pill'];
-  const particles = Array.from({ length: 95 }, (_, i) => ({
+  const particles = Array.from({ length: 90 }, (_, i) => ({
     x: canvas.width * (0.3 + Math.random() * 0.4),
     y: canvas.height * 0.48,
     vx: (Math.random() - 0.5) * 18,
@@ -755,19 +557,15 @@ function launchConfetti() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize 3D Floating Word Cloud in Mid-Air
-  const cloudContainer = document.getElementById('cloud-stage-3d');
-  cloud3D = new TruthCloud3D(cloudContainer, ROSTER_LIST);
+  // Initial idle avatar
+  document.getElementById('avatar-frame').innerHTML = buildBauhausAvatar(0);
 
   document.getElementById('btn-draw').addEventListener('click', toggleDraw);
-  document.getElementById('btn-minimize-card').addEventListener('click', hideSpotlightCard);
 
   window.addEventListener('keydown', e => {
     if (e.code === 'Space') {
       e.preventDefault();
       toggleDraw();
-    } else if (e.key === 'Escape') {
-      hideSpotlightCard();
     }
   });
 });

@@ -41,7 +41,6 @@ html, body {
   background-color: var(--bg-canvas);
   color: var(--text-main);
   overflow: hidden;
-  user-select: none;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -49,59 +48,46 @@ html, body {
 .bg-grid {
   position: fixed;
   inset: 0;
-  background-image: radial-gradient(#DADCE0 1.4px, transparent 1.4px);
+  background-image: radial-gradient(#DADCE0 1.5px, transparent 1.5px);
   background-size: 28px 28px;
   opacity: 0.75;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Soft Google 4-Color Ambient Atmospheric Halos */
-.bg-ambient-glow {
+/* Bauhaus Geometric Corner Art */
+.bg-geometry {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
+  z-index: 1;
 }
 
-.glow-orb {
+.geo-corner {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(85px);
-  opacity: 0.24;
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.orb-blue {
-  width: 460px;
-  height: 460px;
-  background: var(--g-blue);
-  top: -120px;
-  left: -100px;
+.geo-tl {
+  width: 310px;
+  height: 310px;
+  top: -55px;
+  left: -55px;
 }
 
-.orb-yellow {
-  width: 420px;
-  height: 420px;
-  background: var(--g-yellow);
-  top: 15%;
-  right: -120px;
+.geo-br {
+  width: 340px;
+  height: 300px;
+  bottom: -60px;
+  right: -50px;
 }
 
-.orb-red {
-  width: 380px;
-  height: 380px;
-  background: var(--g-red);
-  bottom: -120px;
-  left: 18%;
+body.is-rolling .geo-tl {
+  transform: rotate(14deg) scale(1.07);
 }
 
-.orb-green {
-  width: 400px;
-  height: 400px;
-  background: var(--g-green);
-  bottom: -100px;
-  right: 12%;
+body.is-rolling .geo-br {
+  transform: rotate(-14deg) scale(1.07);
 }
 
 /* Top 4-Color Ribbon */
@@ -113,13 +99,48 @@ html, body {
   height: 7px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  z-index: 50;
+  z-index: 20;
 }
 
 .c-blue, .d-blue { background: var(--g-blue); }
 .c-red, .d-red { background: var(--g-red); }
 .c-yellow, .d-yellow { background: var(--g-yellow); }
 .c-green, .d-green { background: var(--g-green); }
+
+/* Page Switch Pill */
+.page-switch-pill {
+  position: fixed;
+  top: 22px;
+  right: 26px;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--surface-white);
+  border: 2px solid var(--border-dark);
+  box-shadow: 3px 3px 0 var(--border-dark);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.page-switch-pill:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--g-blue);
+  background: var(--g-blue-tint);
+}
+
+.switch-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--g-blue);
+  display: inline-block;
+}
 
 /* Confetti Canvas */
 #confetti-canvas {
@@ -131,211 +152,36 @@ html, body {
   z-index: 999;
 }
 
-/* ==========================================================================
-   3D Floating Word Cloud Viewport (Mid-Air Space)
-   ========================================================================== */
-.cloud-viewport {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  perspective: 1100px;
-  overflow: hidden;
-  z-index: 4;
-  cursor: grab;
-  transition: filter 0.45s ease, opacity 0.45s ease;
-}
-
-.cloud-viewport:active {
-  cursor: grabbing;
-}
-
-/* When Spotlight Winner Card is open, softly dim the background cloud so center card pops while cloud still orbits visibly around it */
-body.card-open .cloud-viewport {
-  opacity: 0.55;
-}
-
-/* Subtle 3D Orbital Guide Rings */
-.orbital-rings {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.orbital-rings .ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1.5px dashed rgba(66, 133, 244, 0.22);
-}
-
-.orbital-rings .ring-1 {
-  width: 760px;
-  height: 440px;
-  transform: rotateX(55deg) rotateZ(-12deg);
-}
-
-.orbital-rings .ring-2 {
-  width: 980px;
-  height: 560px;
-  border-color: rgba(52, 168, 83, 0.18);
-  transform: rotateX(62deg) rotateZ(16deg);
-}
-
-.cloud-stage-3d {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-}
-
-/* Individual Floating Truth Phrase Capsule in Mid-Air */
-.cloud-tag {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  border: 2px solid var(--border-dark);
-  box-shadow: 4px 4px 0 var(--border-dark), 0 10px 24px rgba(32, 33, 36, 0.08);
-  white-space: nowrap;
-  max-width: 440px;
-  cursor: pointer;
-  will-change: transform, opacity, filter;
-  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.cloud-tag:hover {
-  background: #FFFFFF !important;
-  border-color: var(--g-blue) !important;
-  box-shadow: 6px 6px 0 var(--g-blue), 0 14px 28px rgba(66, 133, 244, 0.22) !important;
-  z-index: 900 !important;
-}
-
-/* 4-Color Google Variants for Floating Cloud Tags */
-.cloud-tag.tag-theme-blue {
-  border-color: var(--g-blue-dark);
-  box-shadow: 4px 4px 0 var(--g-blue);
-}
-.cloud-tag.tag-theme-red {
-  border-color: var(--g-red-dark);
-  box-shadow: 4px 4px 0 var(--g-red);
-}
-.cloud-tag.tag-theme-yellow {
-  border-color: #B06000;
-  box-shadow: 4px 4px 0 var(--g-yellow);
-}
-.cloud-tag.tag-theme-green {
-  border-color: var(--g-green-dark);
-  box-shadow: 4px 4px 0 var(--g-green);
-}
-
-/* Highlight flash during lottery spin */
-.cloud-tag.is-flashing {
-  background: var(--g-yellow) !important;
-  color: var(--text-main) !important;
-  border-color: var(--border-dark) !important;
-  box-shadow: 6px 6px 0 var(--border-dark), 0 0 28px rgba(251, 188, 5, 0.75) !important;
-}
-
-/* Geometric Shape Indicator inside Floating Tag */
-.tag-geo-dot {
-  width: 11px;
-  height: 11px;
-  flex-shrink: 0;
-  display: inline-block;
-  border: 1.5px solid var(--border-dark);
-}
-
-.tag-theme-blue .tag-geo-dot {
-  background: var(--g-blue);
-  border-radius: 50%;
-}
-.tag-theme-red .tag-geo-dot {
-  background: var(--g-red);
-  border-radius: 3px;
-}
-.tag-theme-yellow .tag-geo-dot {
-  background: var(--g-yellow);
-  border-radius: 50%;
-}
-.tag-theme-green .tag-geo-dot {
-  background: var(--g-green);
-  border-radius: 999px 2px 999px 2px;
-}
-
-.tag-quote {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-main);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 310px;
-}
-
-.tag-author {
-  font-size: 12.5px;
-  font-weight: 700;
-  padding: 2px 10px;
-  border-radius: 999px;
-  background: var(--bg-canvas);
-  border: 1.5px solid var(--border-light);
-  color: var(--text-sub);
-  flex-shrink: 0;
-}
-
-.tag-theme-blue .tag-author { background: var(--g-blue-tint); color: var(--g-blue-dark); border-color: transparent; }
-.tag-theme-red .tag-author { background: var(--g-red-tint); color: var(--g-red-dark); border-color: transparent; }
-.tag-theme-yellow .tag-author { background: var(--g-yellow-tint); color: #B06000; border-color: transparent; }
-.tag-theme-green .tag-author { background: var(--g-green-tint); color: var(--g-green-dark); border-color: transparent; }
-
-/* ==========================================================================
-   Foreground UI Overlay (Header + Center Spotlight Card + Bottom Button)
-   ========================================================================== */
-.ui-overlay {
+/* Main Centered Screen */
+.main-screen {
   position: relative;
-  z-index: 20;
+  z-index: 10;
   width: 100%;
   height: 100%;
-  padding: 26px 28px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 36px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  pointer-events: none; /* Let mouse drag pass through to 3D cloud in empty areas */
+  justify-content: center;
+  gap: 28px;
 }
 
-.hero-header,
-.action-area,
-.stage-card:not(.is-hidden) {
-  pointer-events: auto;
-}
-
-/* Top Header */
+/* Header Section */
 .hero-header {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  background: rgba(248, 249, 250, 0.82);
-  backdrop-filter: blur(10px);
-  padding: 12px 32px 14px;
-  border-radius: 28px;
-  border: 2px solid rgba(32, 33, 36, 0.12);
+  gap: 10px;
 }
 
 .brand-pill {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 5px 16px;
+  padding: 7px 18px;
   background: var(--surface-white);
   border: 2px solid var(--border-dark);
   border-radius: 999px;
@@ -349,22 +195,22 @@ body.card-open .cloud-viewport {
 }
 
 .g-dots i {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   display: inline-block;
 }
 
 .brand-text {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--text-main);
 }
 
 .hero-title {
-  font-size: 42px;
+  font-size: 52px;
   font-weight: 900;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -372,101 +218,56 @@ body.card-open .cloud-viewport {
 }
 
 .hero-subtitle {
-  font-size: 14.5px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   color: var(--text-sub);
+  letter-spacing: 0.02em;
 }
 
-/* Center Spotlight Zone */
-.spotlight-zone {
-  width: 100%;
-  max-width: 760px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* Centerpiece Stage Card */
 .stage-card {
   width: 100%;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(14px);
+  max-width: 780px;
+  background: var(--surface-white);
   border: 3px solid var(--border-dark);
   border-radius: 32px;
-  box-shadow: 12px 12px 0 var(--border-dark), 0 24px 60px rgba(32, 33, 36, 0.18);
-  padding: 26px 38px 34px;
+  box-shadow: 10px 10px 0 var(--border-dark);
+  padding: 28px 40px 36px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 26px;
   position: relative;
-  transition: all 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
-  transform-origin: center center;
-}
-
-.stage-card.is-hidden {
-  opacity: 0;
-  transform: scale(0.55) translateY(30px);
-  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
 }
 
 .stage-card.winner-locked {
-  animation: flyFromCloud 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cardPop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.stage-card.accent-blue { box-shadow: 12px 12px 0 var(--g-blue), 0 24px 60px rgba(66, 133, 244, 0.22); }
-.stage-card.accent-red { box-shadow: 12px 12px 0 var(--g-red), 0 24px 60px rgba(234, 67, 53, 0.22); }
-.stage-card.accent-yellow { box-shadow: 12px 12px 0 var(--g-yellow), 0 24px 60px rgba(251, 188, 5, 0.25); }
-.stage-card.accent-green { box-shadow: 12px 12px 0 var(--g-green), 0 24px 60px rgba(52, 168, 83, 0.22); }
+.stage-card.accent-blue { box-shadow: 10px 10px 0 var(--g-blue); }
+.stage-card.accent-red { box-shadow: 10px 10px 0 var(--g-red); }
+.stage-card.accent-yellow { box-shadow: 10px 10px 0 var(--g-yellow); }
+.stage-card.accent-green { box-shadow: 10px 10px 0 var(--g-green); }
 
-@keyframes flyFromCloud {
-  0% {
-    opacity: 0;
-    transform: scale(0.35) translateZ(-200px);
-  }
-  70% {
-    opacity: 1;
-    transform: scale(1.03) translateZ(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateZ(0);
-  }
+@keyframes cardPop {
+  0% { transform: scale(0.94); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
 }
 
-/* Minimize / Back to Cloud Button */
-.btn-minimize-card {
-  position: absolute;
-  top: 22px;
-  right: 26px;
-  padding: 6px 14px;
-  border-radius: 999px;
-  border: 2px solid var(--border-dark);
-  background: var(--bg-canvas);
-  font-family: var(--font-sans);
-  font-size: 12.5px;
-  font-weight: 800;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-minimize-card:hover {
-  background: var(--g-yellow);
-  transform: translateY(-1px);
-  box-shadow: 2px 2px 0 var(--border-dark);
-}
-
+/* Top Strip inside Stage Card */
 .card-top-strip {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-bottom: 14px;
+  justify-content: space-between;
+  padding-bottom: 16px;
   border-bottom: 2px solid #F1F3F4;
 }
 
 .strip-dots {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
 .s-dot {
@@ -487,18 +288,20 @@ body.card-open .cloud-viewport {
   color: var(--g-blue-dark);
 }
 
+/* Speaker Display Area */
 .speaker-showcase {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 28px;
+  gap: 32px;
+  padding: 8px 0;
 }
 
 .avatar-frame {
-  width: 116px;
-  height: 116px;
-  min-width: 116px;
-  border-radius: 26px;
+  width: 124px;
+  height: 124px;
+  min-width: 124px;
+  border-radius: 28px;
   border: 3px solid var(--border-dark);
   background: var(--bg-canvas);
   box-shadow: 5px 5px 0 var(--border-dark);
@@ -512,7 +315,8 @@ body.card-open .cloud-viewport {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
+  min-width: 240px;
 }
 
 .speaker-org-tag {
@@ -521,7 +325,7 @@ body.card-open .cloud-viewport {
   padding: 5px 14px;
   border-radius: 999px;
   border: 2px solid var(--border-dark);
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 700;
   background: var(--g-yellow-tint);
   color: #B06000;
@@ -533,13 +337,14 @@ body.card-open .cloud-viewport {
 .speaker-org-tag.tag-green { background: var(--g-green-tint); color: var(--g-green-dark); }
 
 .speaker-name {
-  font-size: 58px;
+  font-size: 64px;
   font-weight: 900;
   line-height: 1.08;
   letter-spacing: -0.02em;
   color: var(--text-main);
 }
 
+/* Divider */
 .truth-divider {
   display: flex;
   align-items: center;
@@ -554,7 +359,7 @@ body.card-open .cloud-viewport {
 
 .div-badge {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 11.5px;
   font-weight: 700;
   letter-spacing: 0.08em;
   padding: 4px 14px;
@@ -563,27 +368,28 @@ body.card-open .cloud-viewport {
   color: #FFFFFF;
 }
 
+/* Embodied Truth Box */
 .truth-box {
   background: var(--bg-canvas);
   border: 2px solid var(--border-dark);
   border-radius: 20px;
-  padding: 18px 24px;
+  padding: 20px 26px;
   text-align: center;
+  position: relative;
 }
 
 .truth-content {
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 21px;
+  font-weight: 700;
   line-height: 1.5;
   color: var(--text-main);
 }
 
-/* Bottom Action Dock */
+/* Action Button */
 .action-area {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
 }
 
 .draw-button {
@@ -591,13 +397,13 @@ body.card-open .cloud-viewport {
   align-items: center;
   justify-content: center;
   gap: 16px;
-  padding: 18px 50px;
+  padding: 20px 54px;
   border-radius: 999px;
   border: 3px solid var(--border-dark);
   background: var(--g-blue);
   color: #FFFFFF;
   font-family: var(--font-sans);
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 900;
   letter-spacing: 0.03em;
   cursor: pointer;
@@ -655,33 +461,12 @@ body.card-open .cloud-viewport {
   display: inline-block;
 }
 
-.cloud-tip {
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--text-sub);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(6px);
-  padding: 5px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--border-light);
-}
-
-.cloud-tip kbd {
-  background: var(--surface-white);
-  border: 1.5px solid var(--border-dark);
-  border-radius: 5px;
-  padding: 1px 6px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-}
-
-@media (max-width: 720px) {
-  .hero-title { font-size: 32px; }
-  .stage-card { padding: 20px; }
-  .speaker-showcase { flex-direction: column; text-align: center; gap: 14px; }
+@media (max-width: 680px) {
+  .hero-title { font-size: 38px; }
+  .stage-card { padding: 22px; }
+  .speaker-showcase { flex-direction: column; text-align: center; gap: 16px; }
   .speaker-details { align-items: center; }
-  .speaker-name { font-size: 40px; }
-  .truth-content { font-size: 16px; }
-  .draw-button { padding: 14px 32px; font-size: 18px; }
+  .speaker-name { font-size: 44px; }
+  .truth-content { font-size: 17px; }
+  .draw-button { padding: 16px 36px; font-size: 18px; }
 }
