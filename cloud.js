@@ -1,304 +1,179 @@
 /**
  * Google 具身真心话 · 3D 分类漫游词云脚本
- * 37 条真实问卷真心话 · 三类情感分类词云（正面好评 / 中性思辨 / 消极吐槽 + 全部）
- * 高帧率 2.5D GPU 合成驱动引擎（零 blur 滤镜、dt 帧率无关物理惯性、悬停减速、平滑切换过渡）
+ * 36 条真实匿名真心话（已移除庄子文词条，不显示姓名、标题栏与底部切换条）
+ * 通过键盘快捷键切换：1(正面好评) / 2(中性思辨) / 3(消极吐槽) / 4或0(全部) / ←→ 循环切换 / Esc 关闭弹窗
  */
 
 const TRUTH_ITEMS = [
   // ======================== 正面好评 (17 条) ========================
   {
-    name: '朱徽',
-    role: '参会嘉宾',
-    org: '荣耀终端股份有限公司 · 具身模型平台负责人',
     truth: '期待一场具身领域数据×模型范式的变革',
     sentiment: 'positive'
   },
   {
-    name: '陈粤洋',
-    role: '参会嘉宾',
-    org: '时切科技 · 联创 & CEO',
     truth: '我对具身智能有个挺私人的期待：就是等我老了，在各种场景它能照顾好我，让我想去的地方还能去，想做的事情还能做',
     sentiment: 'positive'
   },
   {
-    name: '刘逸阳',
-    role: '参会嘉宾',
-    org: '清华大学智能产业研究院 · 学生',
     truth: '未来是具身的',
     sentiment: 'positive'
   },
   {
-    name: '贺一鸣',
-    role: '参会嘉宾',
-    org: '清华大学机械系 · 博士生',
     truth: '希望蛋糕越做越大',
     sentiment: 'positive'
   },
   {
-    name: '张天秋',
-    role: '参会嘉宾',
-    org: '北京大学 · 博士生',
     truth: '在技术没有收敛的今天，任何尝试都值得',
     sentiment: 'positive'
   },
   {
-    name: '黄悦',
-    role: '参会嘉宾',
-    org: '智身科技 · 研究员',
     truth: 'Make Simulation Great Again',
     sentiment: 'positive'
   },
   {
-    name: '谭恒楷',
-    role: '圆桌嘉宾',
-    org: '生数科技 · 世界模型负责人',
     truth: '耐心长期做难而正确的事',
     sentiment: 'positive'
   },
   {
-    name: '马璁',
-    role: '圆桌嘉宾',
-    org: '北京星源智机器人科技有限公司 · 合伙人',
     truth: '需要行业共同努力推进具身的研发及落地',
     sentiment: 'positive'
   },
   {
-    name: '胡王浩',
-    role: '参会嘉宾',
-    org: '清华大学电子工程系 · 博士生',
     truth: '或许道路是曲折的，但我相信前途是光明的',
     sentiment: 'positive'
   },
   {
-    name: '王欣晖',
-    role: '参会嘉宾',
-    org: 'botworld · 创始人',
     truth: '一起加油',
     sentiment: 'positive'
   },
   {
-    name: '黄力昂',
-    role: '主旨演讲嘉宾',
-    org: '共绩科技 · 联合创始人',
     truth: '感觉类似GPT-6接入机器人的方案很有戏',
     sentiment: 'positive'
   },
   {
-    name: '徐超逸',
-    role: '参会嘉宾',
-    org: '北京大学 · 博士生',
     truth: '未来可期!',
     sentiment: 'positive'
   },
   {
-    name: '何畅',
-    role: '参会嘉宾',
-    org: '北京理工大学管理学院 / 探月具身智能社区 · MBA硕士生 / 公关和生态总监',
     truth: '希望具身智能2-3年以一批“场景专用、边界清晰、ROI可算”的具身系统在物流、巡检、零售、医疗配送等领域逐步铺开的方式兑现',
     sentiment: 'positive'
   },
   {
-    name: '胡鹏飞',
-    role: '受邀嘉宾',
-    org: '普罗社 puluopic · 联合创始人',
     truth: '这是一个很好很有未来的行业',
     sentiment: 'positive'
   },
   {
-    name: '王楠',
-    role: '参会嘉宾',
-    org: 'POOPSENSE 便知 · 创始人 & CEO',
     truth: '具身行业任重道远，但physical AI是未来！',
     sentiment: 'positive'
   },
   {
-    name: '郭彦江',
-    role: '参会嘉宾',
-    org: '清华大学 · 博士生',
     truth: '继续加油呀',
     sentiment: 'positive'
   },
   {
-    name: '张艺潆',
-    role: '参会嘉宾',
-    org: '大模型公司（自由量级+新项目） · 联合创始人',
     truth: '还有很长的路 一起加油 互相上下游',
     sentiment: 'positive'
   },
 
   // ======================== 中性思辨 (12 条) ========================
   {
-    name: '邱子昱',
-    role: '参会嘉宾',
-    org: '香港大学 Mobility Transformation Lab · 博士生',
     truth: '慢科研是对的',
     sentiment: 'neutral'
   },
   {
-    name: '姚浩煊',
-    role: '参会嘉宾',
-    org: '北京大学生命科学学院唐世明实验室 · 视觉神经科学博士生',
     truth: '作为视觉神经科学领域的应届毕业生，是否有机会加入到具身智能行业中？',
     sentiment: 'neutral'
   },
   {
-    name: '孟相汀',
-    role: '参会嘉宾',
-    org: '上海科技大学 · 博士生',
     truth: 'code always as the policy',
     sentiment: 'neutral'
   },
   {
-    name: '洪东海',
-    role: '参会嘉宾',
-    org: '北京大学 · 硕士生（智能科学与技术）',
     truth: '想聊一聊大家对于世界模型的看法，是故事还是真实技术方向？如果是后者，对其的技术预期是什么？',
     sentiment: 'neutral'
   },
   {
-    name: '吴合风',
-    role: '参会嘉宾',
-    org: '清华大学 · 硕士生',
     truth: '目前大模型已进入自迭代，进入RSI，具身领域未来是否也会这样，未来大模型边界是否能够进入到具身智能领域',
     sentiment: 'neutral'
   },
   {
-    name: '曹家骏',
-    role: '参会嘉宾',
-    org: '北京大学 · 博士生',
     truth: 'astra是不是具身的gpt时刻',
     sentiment: 'neutral'
   },
   {
-    name: '李世乾',
-    role: '参会嘉宾',
-    org: '北京大学 · 博士生',
     truth: '希望看到能真正落地的技术突破',
     sentiment: 'neutral'
   },
   {
-    name: '丁鹏翔',
-    role: '参会嘉宾',
-    org: '共生知行 · 创始人',
     truth: '慢慢长征路刚刚开始',
     sentiment: 'neutral'
   },
   {
-    name: '邱迪聪',
-    role: '参会嘉宾',
-    org: '数耀量生 QuantSparkle.ai · 联合创始人 & CTO',
     truth: '希望可以更在落地方向发力',
     sentiment: 'neutral'
   },
   {
-    name: '臧晟',
-    role: '参会嘉宾',
-    org: '新加坡南洋理工大学 AMI Lab · 博士生',
     truth: '后Astra时代具身基模的定位以及Sim在其中的作用',
     sentiment: 'neutral'
   },
   {
-    name: '王博',
-    role: '参会嘉宾',
-    org: '北京大学 · 博士生',
     truth: '具身智能的未来将走向哪里？',
     sentiment: 'neutral'
   },
   {
-    name: '韦小宝',
-    role: '参会嘉宾',
-    org: '北京大学 HMI Lab · 博士生',
     truth: 'gpt时刻什么时候来临',
     sentiment: 'neutral'
   },
 
-  // ======================== 消极吐槽 (8 条) ========================
+  // ======================== 消极吐槽 (7 条) ========================
   {
-    name: '庄子文',
-    role: '参会嘉宾',
-    org: '清华大学交叉信息研究院 · 博士生',
-    truth: '一群不懂的人抄另一群不懂的人',
-    sentiment: 'negative'
-  },
-  {
-    name: '高敏',
-    role: '探月主办方',
-    org: '探月具身智能社区 · 联合创始人',
     truth: '具身智能行业啥时候能让我的股票不亏',
     sentiment: 'negative'
   },
   {
-    name: '李和衷',
-    role: '参会嘉宾',
-    org: '清华大学 · 博士生',
     truth: '可能都是给gpt打工的',
     sentiment: 'negative'
   },
   {
-    name: '钱泽中',
-    role: '参会嘉宾',
-    org: '北京大学 HMI Lab · 博士生',
     truth: 'Astra时代下，VLA/WAM这种actor是否已经被淘汰了',
     sentiment: 'negative'
   },
   {
-    name: '冯志远',
-    role: '参会嘉宾',
-    org: '清华大学 · 博士生',
     truth: '模型方面应该走vla路线还是wam路线还是直接完全走llm路线，硬件方面真的可以做到和人一样灵巧和延迟嘛',
     sentiment: 'negative'
   },
   {
-    name: '洪戴维',
-    role: '参会嘉宾',
-    org: '清华大学电子工程系 / DISCOVER Lab · 博士研究生',
     truth: '什么时候能进家庭？成本能压到多少？路线会收敛到哪？',
     sentiment: 'negative'
   },
   {
-    name: '王瑞恒',
-    role: '参会嘉宾',
-    org: '西安交通大学 · 硕士生',
     truth: '新agentic时代下vla wam 的路应该何去何从，我们尚在探索中',
     sentiment: 'negative'
   },
   {
-    name: '马国政',
-    role: '参会嘉宾',
-    org: '南洋理工大学 GRAIL · 博士生',
     truth: '具身智能，是否还需要多少人的灵光一现',
     sentiment: 'negative'
   }
 ];
 
+const CATEGORY_ORDER = ['positive', 'neutral', 'negative', 'all'];
+
 const CLOUD_CATEGORIES = {
   positive: {
     key: 'positive',
-    title: '正面好评',
-    subtitle: '乐观期待与行业愿景',
-    themes: ['green', 'blue'],
-    accent: 'green'
+    themes: ['green', 'blue']
   },
   neutral: {
     key: 'neutral',
-    title: '中性思辨',
-    subtitle: '理性探讨与技术发问',
-    themes: ['blue', 'yellow'],
-    accent: 'blue'
+    themes: ['blue', 'yellow']
   },
   negative: {
     key: 'negative',
-    title: '消极吐槽',
-    subtitle: '犀利批判与现实焦虑',
-    themes: ['red', 'yellow'],
-    accent: 'red'
+    themes: ['red', 'yellow']
   },
   all: {
     key: 'all',
-    title: '全部词条',
-    subtitle: '全景具身真心话漫游',
-    themes: ['blue', 'red', 'yellow', 'green'],
-    accent: 'blue'
+    themes: ['blue', 'red', 'yellow', 'green']
   }
 };
 
@@ -364,7 +239,7 @@ class TruthCloud3D {
 
   formatCloudSnippet(item) {
     const raw = (item.truth || '').trim();
-    return raw.length > 22 ? raw.slice(0, 21) + '…' : raw;
+    return raw.length > 24 ? raw.slice(0, 23) + '…' : raw;
   }
 
   mountCategory(catKey) {
@@ -373,10 +248,6 @@ class TruthCloud3D {
     const items = this.getItemsForCategory(catKey);
 
     document.body.setAttribute('data-category', catKey);
-    const subtitleEl = document.getElementById('cloud-subtitle');
-    if (subtitleEl) {
-      subtitleEl.textContent = `${config.title} · ${config.subtitle}（${items.length} 条）`;
-    }
 
     this.container.innerHTML = '';
     const N = items.length;
@@ -409,7 +280,6 @@ class TruthCloud3D {
       el.innerHTML = `
         <span class="tag-geo-dot"></span>
         <span class="tag-quote">“${this.escape(snippet)}”</span>
-        <span class="tag-author">${this.escape(item.name)}</span>
       `;
 
       el.addEventListener('pointerenter', () => {
@@ -466,6 +336,13 @@ class TruthCloud3D {
     }
   }
 
+  stepCategory(delta) {
+    const targetCat = this.pendingCategory || this.activeCategory;
+    const idx = CATEGORY_ORDER.indexOf(targetCat);
+    const nextIdx = (idx + delta + CATEGORY_ORDER.length) % CATEGORY_ORDER.length;
+    this.switchCategory(CATEGORY_ORDER[nextIdx]);
+  }
+
   setModalOpen(open) {
     this.isModalOpen = open;
     if (open) {
@@ -510,19 +387,16 @@ class TruthCloud3D {
         const dy = e.clientY - this.lastPtrY;
         this.dragDistance += Math.hypot(dx, dy);
 
-        // 1:1 responsive direct rotation while dragging
         const dAngleY = dx * 0.0042;
         const dAngleX = -dy * 0.0042;
         this.rotateAllNodes(dAngleY, dAngleX);
 
-        // Track instantaneous angular velocity for smooth release inertia
         this.dragVelY = Math.max(-4.5, Math.min(4.5, dx * 0.24));
         this.dragVelX = Math.max(-3.0, Math.min(3.0, -dy * 0.24));
 
         this.lastPtrX = e.clientX;
         this.lastPtrY = e.clientY;
       } else if (e.pointerType === 'mouse' && !this.isHoveringTag && !this.isModalOpen) {
-        // Gentle clamped cursor steering that smoothly decays when pointer stops
         const nx = (e.clientX / this.vpWidth - 0.5) * 2;
         const ny = (e.clientY / this.vpHeight - 0.5) * 2;
         this.parallaxVelY = Math.max(-0.55, Math.min(0.55, nx * 0.42));
@@ -552,7 +426,6 @@ class TruthCloud3D {
     this.lastFrameTime = now;
     this.elapsed += dt;
 
-    // Smoothly handle exit -> mount -> enter transition
     let isExiting = false;
     let exitProgress = 0;
 
@@ -572,12 +445,10 @@ class TruthCloud3D {
       }
     }
 
-    // Target ambient speed multiplier: freeze on modal, slow down smoothly on hover
     const targetSpeedScale = this.isModalOpen ? 0.0 : (this.isHoveringTag ? 0.12 : 1.0);
     const lerpAlpha = 1 - Math.exp(-10 * dt);
     this.speedScale += (targetSpeedScale - this.speedScale) * lerpAlpha;
 
-    // Exponential decay on drag inertia & passive cursor steering
     if (!this.isDragging) {
       const dragDecay = Math.exp(-3.5 * dt);
       const parallaxDecay = Math.exp(-2.8 * dt);
@@ -592,9 +463,8 @@ class TruthCloud3D {
       this.rotateAllNodes(effectiveVelY * dt, effectiveVelX * dt);
     }
 
-    // Ellipsoid spatial dimensions
     const rx = Math.min(this.vpWidth * 0.41, 610) * this.radiusScale;
-    const ry = Math.min(this.vpHeight * 0.34, 320) * this.radiusScale;
+    const ry = Math.min(this.vpHeight * 0.36, 340) * this.radiusScale;
     const rz = 380 * this.radiusScale;
     const focal = 980;
 
@@ -624,7 +494,6 @@ class TruthCloud3D {
       const py = node.y * ry * radialMultiplier + floatOffsetY;
       const pz = node.z * rz * radialMultiplier;
 
-      // Clean 2.5D perspective projection rendered purely in GPU 2D transform
       const persp = focal / (focal - pz);
       const screenX = px * persp;
       const screenY = py * persp;
@@ -664,16 +533,12 @@ function openQuoteModal(item, theme) {
   const modal = document.getElementById('quote-modal');
   const card = document.getElementById('quote-card');
   const badgeEl = document.getElementById('quote-sentiment-badge');
-  const orgEl = document.getElementById('quote-org');
   const textEl = document.getElementById('quote-full-text');
-  const nameEl = document.getElementById('quote-author-name');
 
   card.style.boxShadow = `10px 10px 0 var(--g-${theme})`;
   badgeEl.className = `quote-sentiment-badge sent-${item.sentiment}`;
   badgeEl.textContent = SENTIMENT_LABELS[item.sentiment] || '具身真心话';
-  orgEl.textContent = item.org;
   textEl.textContent = `“${item.truth}”`;
-  nameEl.textContent = `${item.name} (${item.role || '参会嘉宾'})`;
 
   modal.classList.remove('is-hidden');
   if (cloudApp) cloudApp.setModalOpen(true);
@@ -684,52 +549,36 @@ function closeQuoteModal() {
   if (cloudApp) cloudApp.setModalOpen(false);
 }
 
-function setActiveCategoryButton(catKey) {
-  document.querySelectorAll('.cat-btn').forEach((btn) => {
-    btn.classList.toggle('active', btn.dataset.category === catKey);
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Update live category counts dynamically
-  const posCount = TRUTH_ITEMS.filter((i) => i.sentiment === 'positive').length;
-  const neuCount = TRUTH_ITEMS.filter((i) => i.sentiment === 'neutral').length;
-  const negCount = TRUTH_ITEMS.filter((i) => i.sentiment === 'negative').length;
-  document.getElementById('count-positive').textContent = posCount;
-  document.getElementById('count-neutral').textContent = neuCount;
-  document.getElementById('count-negative').textContent = negCount;
-  document.getElementById('count-all').textContent = TRUTH_ITEMS.length;
-
   const cloudContainer = document.getElementById('cloud-stage-3d');
   const cloudViewport = document.getElementById('cloud-viewport');
   cloudApp = new TruthCloud3D(cloudContainer, cloudViewport);
 
-  // Category switch buttons
-  document.querySelectorAll('.cat-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const cat = btn.dataset.category;
-      setActiveCategoryButton(cat);
-      cloudApp.switchCategory(cat);
-    });
-  });
-
-  // Modal close listeners
   document.getElementById('quote-close').addEventListener('click', closeQuoteModal);
   document.getElementById('quote-modal').addEventListener('click', (e) => {
     if (e.target.id === 'quote-modal') closeQuoteModal();
   });
 
-  // Keyboard shortcuts: 1/2/3/4 to switch clouds, Escape to close modal
+  // Pure keyboard switching:
+  // 1 = 正面好评, 2 = 中性思辨, 3 = 消极吐槽, 4 or 0 = 全部词条, ArrowLeft/ArrowRight = 循环切换, Escape = 关闭弹窗
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeQuoteModal();
       return;
     }
-    const keyMap = { '1': 'positive', '2': 'neutral', '3': 'negative', '4': 'all' };
+    const keyMap = {
+      '1': 'positive',
+      '2': 'neutral',
+      '3': 'negative',
+      '4': 'all',
+      '0': 'all'
+    };
     if (keyMap[e.key]) {
-      const cat = keyMap[e.key];
-      setActiveCategoryButton(cat);
-      cloudApp.switchCategory(cat);
+      cloudApp.switchCategory(keyMap[e.key]);
+    } else if (e.key === 'ArrowRight') {
+      cloudApp.stepCategory(1);
+    } else if (e.key === 'ArrowLeft') {
+      cloudApp.stepCategory(-1);
     }
   });
 });
