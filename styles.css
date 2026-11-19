@@ -181,7 +181,7 @@ body.is-rolling .geo-br {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 28px;
   padding: 10px 26px;
   background: var(--surface-white);
   border: 2px solid var(--border-dark);
@@ -194,14 +194,7 @@ body.is-rolling .geo-br {
   width: auto;
   display: block;
   object-fit: contain;
-  transform: translateY(1px);
-}
-
-.brand-cross {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-sub);
-  line-height: 1;
+  transform: translateY(2px);
 }
 
 .tanyue-logo {
@@ -464,7 +457,7 @@ body.is-rolling .geo-br {
 }
 
 @media (max-width: 680px) {
-  .brand-pill { padding: 7px 16px; gap: 10px; }
+  .brand-pill { padding: 7px 16px; gap: 16px; }
   .google-cloud-logo { height: 20px; }
   .tanyue-logo { height: 20px; }
   .hero-title { font-size: 38px; }

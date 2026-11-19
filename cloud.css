@@ -200,7 +200,7 @@ body[data-category="all"] .orb { opacity: 0.95; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 24px;
   padding: 8px 22px;
   background: var(--surface-white);
   border: 2px solid var(--border-dark);
@@ -213,14 +213,7 @@ body[data-category="all"] .orb { opacity: 0.95; }
   width: auto;
   display: block;
   object-fit: contain;
-  transform: translateY(1px);
-}
-
-.brand-cross {
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--text-sub);
-  line-height: 1;
+  transform: translateY(2px);
 }
 
 .tanyue-logo {
@@ -638,7 +631,7 @@ body[data-category="negative"] .orbital-rings .ring-2 { border-color: rgba(251, 
 }
 
 @media (max-width: 720px) {
-  .brand-pill { padding: 6px 14px; gap: 9px; }
+  .brand-pill { padding: 6px 14px; gap: 14px; }
   .google-cloud-logo { height: 18px; }
   .tanyue-logo { height: 18px; }
   .cloud-title { font-size: 22px; }
