@@ -200,33 +200,20 @@ body[data-category="all"] .orb { opacity: 0.95; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 6px 18px;
+  gap: 14px;
+  padding: 8px 22px;
   background: var(--surface-white);
   border: 2px solid var(--border-dark);
   border-radius: 999px;
   box-shadow: 3px 3px 0 var(--border-dark);
 }
 
-.g-dots {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.g-dots i {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.brand-text {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--text-main);
+.google-cloud-logo {
+  height: 22px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  transform: translateY(1px);
 }
 
 .brand-cross {
@@ -651,8 +638,8 @@ body[data-category="negative"] .orbital-rings .ring-2 { border-color: rgba(251, 
 }
 
 @media (max-width: 720px) {
-  .brand-pill { padding: 5px 12px; gap: 7px; }
-  .brand-text { font-size: 10.5px; }
+  .brand-pill { padding: 6px 14px; gap: 9px; }
+  .google-cloud-logo { height: 18px; }
   .tanyue-logo { height: 18px; }
   .cloud-title { font-size: 22px; }
   .cloud-subtitle { font-size: 12px; }
