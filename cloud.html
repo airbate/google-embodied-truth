@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Google 具身真心话 · 3D 悬浮词云</title>
+  <title>Google 具身真心话 · 3D 分类漫游词云</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Noto+Sans+SC:wght@400;500;700;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cloud.css" />
 </head>
-<body>
-  <!-- Subtle Swiss Dot Grid & Google 4-Color Ambient Halos -->
+<body data-category="positive">
+  <!-- Subtle Swiss Dot Grid & Zero-Blur Radial Gradient Halos -->
   <div class="bg-grid" aria-hidden="true"></div>
   <div class="bg-ambient" aria-hidden="true">
     <span class="orb orb-blue"></span>
@@ -69,9 +69,10 @@
       <span class="brand-text">GOOGLE · EMBODIED AI TRUTH CLOUD</span>
     </div>
     <h1 class="cloud-title">具身真心话 · 漫游词云</h1>
+    <p class="cloud-subtitle" id="cloud-subtitle">正面好评 · 乐观期待与行业愿景（17 条）</p>
   </header>
 
-  <!-- Full-Screen 3D Floating Quote Cloud Space -->
+  <!-- Full-Screen 2.5D GPU-Accelerated Floating Quote Cloud Space -->
   <div class="cloud-viewport" id="cloud-viewport">
     <div class="orbital-rings" aria-hidden="true">
       <div class="ring ring-1"></div>
@@ -81,11 +82,12 @@
     <div class="cloud-stage-3d" id="cloud-stage-3d"></div>
   </div>
 
-  <!-- Optional Quote Detail Modal when Clicking a Floating Cloud Phrase -->
+  <!-- Quote Detail Modal when Clicking a Floating Cloud Phrase -->
   <div class="quote-modal is-hidden" id="quote-modal">
     <div class="quote-card" id="quote-card">
       <button class="quote-close" id="quote-close" title="关闭 (Esc)">✕</button>
       <div class="quote-meta">
+        <span class="quote-sentiment-badge" id="quote-sentiment-badge">正面好评</span>
         <span class="quote-org" id="quote-org"></span>
       </div>
       <blockquote class="quote-full-text" id="quote-full-text"></blockquote>
@@ -98,10 +100,32 @@
     </div>
   </div>
 
-  <!-- Subtle Bottom Hint -->
+  <!-- Bottom Floating Category Switcher Dock & Interaction Hint -->
   <footer class="cloud-footer">
+    <nav class="category-dock" aria-label="真心话情感分类切换">
+      <button class="cat-btn active" data-category="positive" type="button">
+        <span class="cat-dot dot-green"></span>
+        <span class="cat-label">正面好评</span>
+        <span class="cat-count" id="count-positive">17</span>
+      </button>
+      <button class="cat-btn" data-category="neutral" type="button">
+        <span class="cat-dot dot-blue"></span>
+        <span class="cat-label">中性思辨</span>
+        <span class="cat-count" id="count-neutral">12</span>
+      </button>
+      <button class="cat-btn" data-category="negative" type="button">
+        <span class="cat-dot dot-red"></span>
+        <span class="cat-label">消极吐槽</span>
+        <span class="cat-count" id="count-negative">8</span>
+      </button>
+      <button class="cat-btn" data-category="all" type="button">
+        <span class="cat-dot dot-all"></span>
+        <span class="cat-label">全部词条</span>
+        <span class="cat-count" id="count-all">37</span>
+      </button>
+    </nav>
     <div class="hint-pill">
-      拖拽或移动鼠标可 360° 拨动半空中的真心话词云 · 点击任意词条可放大阅读原话
+      支持鼠标拖拽拨动 · 悬停减速阅读 · 点击词条看原文 · 快捷键 1/2/3/4 切换
     </div>
   </footer>
 
